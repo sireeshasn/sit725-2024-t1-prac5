@@ -1,14 +1,23 @@
-const { client } = require('../dbconnection');
+const { MongoClient } = require('mongodb');
 
-const db = client.db('test');
-const collection = db.collection('Cat');
+async function createCat(catData, uri) {
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-async function getAllCats() {
-    return await collection.find({}).toArray();
+    try {
+        await client.connect();
+        const database = client.db('yourDatabaseName');
+        const collection = database.collection('cats');
+        
+        // Insert the cat data into the MongoDB collection
+        const result = await collection.insertOne(catData);
+        console.log('Cat created successfully');
+        return result;
+    } catch (error) {
+        console.error('Error creating cat:', error);
+        throw error;
+    } finally {
+        await client.close();
+    }
 }
 
-async function createCat(catData) {
-    return await collection.insertOne(catData);
-}
-
-module.exports = { getAllCats, createCat };
+module.exports = { createCat };

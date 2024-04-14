@@ -16,10 +16,11 @@ connectToDatabase();
 // Routes
 app.use('/api', routes);
 
-// Serve static files
+// Serve static files (assuming they are in a 'public' directory)
 app.use(express.static('public'));
 
 // Start server
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
